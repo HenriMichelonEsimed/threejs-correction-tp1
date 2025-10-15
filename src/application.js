@@ -23,7 +23,9 @@ export class Application {
         this.scene.loadScene('/scenes/scene_1.json')
 
         this.ui = new UI()
-        this.ui.addGlobalUI(this.globalParams, this.camera.toogleControls.bind(this.camera))
+        this.ui.addGlobalUI(this.globalParams, this.camera.toogleControls.bind(this.camera), () => {
+            this.scene.exportScene({ skybox : this.skyboxParams, ground: this.groundParams})
+        });
         this.ui.addSelectionUI()
         this.ui.addSkyboxUI(this.skyboxFiles, this.skyboxParams, this.scene.addSkybox.bind(this.scene))
         this.ui.addGroundUI(this.groundTextures, this.groundParams, this.scene.changeGround.bind(this.scene))

@@ -93,4 +93,36 @@ export class Scene {
         }
     }
 
+    exportScene(params) {
+        let exportData = {
+            params: params,
+            nodes: [],
+        };
+        let toExport = new Set()
+        this.scene.traverse((obj) => {
+            if (obj.userData && obj.userData.isSelectable) {
+                toExport.add(obj.userData.object);
+            }
+        });
+        toExport.forEach((obj) => {  
+            exportData.nodes.push({
+                name: obj.name || '',
+                position: `${obj.position.x},${obj.position.y},${obj.position.z}`,
+                rotation: `${obj.quaternion.x},${obj.quaternion.y},${obj.quaternion.z},${obj.quaternion.w}`,
+                scale: `${obj.scale.x},${obj.scale.y},${obj.scale.z}`
+            });
+        });
+
+        const jsonStr = JSON.stringify(exportData, null, 2);
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'scene_export.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
 }
