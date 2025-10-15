@@ -12,7 +12,7 @@ export class Application {
         this.renderer.shadowMap.enabled = true
         document.body.appendChild(this.renderer.domElement)
 
-        this.camera = new Camera(this.renderer)
+        this.camera = new Camera(this.renderer, this.globalParams)
 
         this.scene = new Scene()        
         // this.scene.addCube()
