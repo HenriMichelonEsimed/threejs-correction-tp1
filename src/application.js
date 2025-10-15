@@ -19,8 +19,8 @@ export class Application {
         this.scene.addAmbiantLight()
         this.scene.addGround(this.groundParams.texture, this.groundParams.repeats)
         this.scene.addSkybox(this.skyboxParams.file)
-        this.scene.loadScene('/scenes/scene_1.json')
         this.sunHelper = this.scene.addDirectionalLight()
+        this.scene.loadScene('/scenes/scene_1.json')
 
         this.ui = new UI()
         this.ui.addSkyboxUI(this.skyboxFiles, this.skyboxParams, this.scene.addSkybox.bind(this.scene))
@@ -53,6 +53,7 @@ export class Application {
     }
 
     render() {
+        this.camera.process()
         this.sunHelper.update()
         this.renderer.render(this.scene.scene, this.camera.camera)
     }
