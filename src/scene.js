@@ -1,15 +1,29 @@
 import * as THREE from 'three/webgpu'
+import { createStandardMaterial } from './tools'
 
 export class Scene {
 
     constructor() {
         this.scene = new THREE.Scene()
-        this.ambiantLight()
     }
 
-    ambiantLight() {
+    addAmbiantLight() {
         const ambient = new THREE.AmbientLight(0xFFFFFF, .5);
         this.scene.add(ambient);
+    }
+
+    addGround(texture, repeats) {
+        const planeSize = 5000;
+        const planeMatPBR = createStandardMaterial(texture, repeats);
+
+        const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize);
+        planeGeo.setAttribute('uv2', new THREE.BufferAttribute(planeGeo.attributes.uv.array, 2));
+
+        const planeMesh = new THREE.Mesh(planeGeo, planeMatPBR);
+        planeMesh.rotation.x = Math.PI * -.5;
+        planeMesh.receiveShadow = true;
+
+        this.scene.add(planeMesh);
     }
 
     addCube() {
@@ -23,5 +37,5 @@ export class Scene {
         cube.position.y = 1.0;
         this.scene.add(cube);
     }
-    
+
 }

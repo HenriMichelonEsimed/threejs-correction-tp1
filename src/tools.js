@@ -1,6 +1,10 @@
 
+import * as THREE from 'three/webgpu'
+
+export const textureloader = new THREE.TextureLoader();
+
 export const createStandardMaterial = function (texture, repeats) {
-    
+
   const floorTexture = textureloader.load(`textures/${texture}_diff_1k.jpg`);
     floorTexture.wrapS = THREE.RepeatWrapping;
     floorTexture.wrapT = THREE.RepeatWrapping;
@@ -31,4 +35,5 @@ export const createStandardMaterial = function (texture, repeats) {
         roughness: 1.0,       
         metalness: 1.0,      
     });
+
 }
