@@ -8,15 +8,15 @@ export class Application {
         this.initParams();
         this.renderer = new THREE.WebGPURenderer({antialias: true})
         this.renderer.setSize(window.innerWidth, window.innerHeight)
-        this.renderer.shadowMap.enabled = true
         document.body.appendChild(this.renderer.domElement)
 
         this.camera = new Camera(this.renderer);
         this.scene = new Scene();
         this.scene.addCube();
         this.scene.addAmbiantLight();
-        this.sunHelper = this.scene.addDirectionalLight();
         this.scene.addGround(this.groundParams.texture, this.groundParams.repeats);
+        this.scene.loadScene('/scenes/scene_1.json');
+        this.sunHelper = this.scene.addDirectionalLight();
         this.renderer.setAnimationLoop(this.render.bind(this));
     }
 
@@ -38,6 +38,5 @@ export class Application {
         this.sunHelper.update();
         this.renderer.render(this.scene.scene, this.camera.camera);
     }
-
 
 }

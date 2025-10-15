@@ -1,7 +1,46 @@
 
 import * as THREE from 'three/webgpu'
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js'
 
 export const textureloader = new THREE.TextureLoader()
+const gltfLoader = new GLTFLoader()
+
+export class ColorGUIHelper {
+  constructor(object, prop) {
+    this.object = object
+    this.prop = prop
+  }
+  get value() {
+    return `#${this.object[this.prop].getHexString()}`
+  }
+  set value(hexString) {
+    this.object[this.prop].set(hexString)
+  }
+}
+
+export const loadGltf = function (filename) {
+    return new Promise((resolve, reject) => {
+        gltfLoader.load(
+            `/models/${filename}.glb`,
+            (gltf) => {
+                const mesh = gltf.scene
+                mesh.name = filename
+                mesh.traverse(o => { 
+                if (o.isMesh) { 
+                    o.castShadow = true; 
+                    o.receiveShadow = true; 
+                }})
+                resolve(mesh)
+            },
+            undefined,
+            (error) => {
+                console.error(`Error loading ${filename}:`, error)
+                reject(error)
+            }
+        );
+    });
+}
+
 
 export const createStandardMaterial = function (texture, repeats) {
 

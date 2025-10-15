@@ -1,9 +1,10 @@
 import * as THREE from 'three/webgpu'
-import { createStandardMaterial } from './tools'
+import { createStandardMaterial, loadGltf } from './tools'
 
 export class Scene {
 
     constructor() {
+        this.loadedObjects = {};
         this.scene = new THREE.Scene()
     }
 
@@ -46,6 +47,22 @@ export class Scene {
         cube.castShadow = true
         cube.position.y = 1.0
         this.scene.add(cube)
+    }
+
+    async loadScene(url) {
+        let data = null
+        const response = await fetch(url)
+        data = await response.json()
+        for (const obj of data.nodes) {
+            if (this.loadedObjects[obj.name] == undefined) {
+                this.loadedObjects[obj.name] = await loadGltf(obj.name)
+            }
+            let mesh = this.loadedObjects[obj.name].clone()
+            mesh.position.fromArray(obj.position.split(',').map(Number))
+            mesh.quaternion.fromArray(obj.rotation.split(',').map(Number))
+            mesh.scale.fromArray(obj.scale.split(',').map(Number))
+            this.scene.add(mesh)
+        }
     }
 
 }
