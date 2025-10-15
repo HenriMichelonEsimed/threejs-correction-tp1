@@ -82,6 +82,13 @@ export class Scene {
             mesh.position.fromArray(obj.position.split(',').map(Number))
             mesh.quaternion.fromArray(obj.rotation.split(',').map(Number))
             mesh.scale.fromArray(obj.scale.split(',').map(Number))
+            mesh.traverse(o => { 
+            if (o.isMesh) { 
+                o.userData = { 
+                    isSelectable: true,
+                    object : mesh,
+                };
+            }});
             this.scene.add(mesh)
         }
     }

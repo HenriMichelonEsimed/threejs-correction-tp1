@@ -24,9 +24,40 @@ export class Application {
 
         this.ui = new UI()
         this.ui.addGlobalUI(this.globalParams, this.camera.toogleControls.bind(this.camera))
+        this.ui.addSelectionUI()
         this.ui.addSkyboxUI(this.skyboxFiles, this.skyboxParams, this.scene.addSkybox.bind(this.scene))
         this.ui.addGroundUI(this.groundTextures, this.groundParams, this.scene.changeGround.bind(this.scene))
         this.ui.addSunUI(this.scene.sun)
+
+        this.selectedObject = null;
+        this.selectedMesh = null;
+        this.selectedMeshMaterial = null;
+        this.renderer.domElement.addEventListener('click', (event) => {
+            if (this.globalParams.useWASD) return;
+            if (this.selectedObject != null) {
+                this.selectedMesh.material = this.selectedMeshMaterial
+                this.selectedObject = null;
+            }
+            const rect = this.renderer.domElement.getBoundingClientRect()
+            const mouse = new THREE.Vector2(
+                ((event.clientX - rect.left) / rect.width) * 2 - 1,
+                -((event.clientY - rect.top) / rect.height) * 2 + 1
+            )
+            const raycaster = new THREE.Raycaster()
+            raycaster.setFromCamera(mouse, this.camera.camera)
+            const intersects = raycaster.intersectObjects(this.scene.scene.children, true)
+            const hit = intersects.find(i => i.object && i.object.userData && i.object.userData.isSelectable)
+            if (hit) {
+                this.selectedMesh = hit.object
+                this.selectedObject = this.selectedMesh.userData.object
+                this.selectedMeshMaterial = this.selectedMesh.material
+                this.selectedMesh.material = new THREE.MeshStandardMaterial({ color: 0xffff00 })
+                this.ui.updateSelectionUI(this.selectedObject)
+            } else {
+                this.ui.hideSelectionUI()
+            }
+        });
+
 
         this.renderer.setAnimationLoop(this.render.bind(this))
     }

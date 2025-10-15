@@ -80,6 +80,7 @@ export class Camera {
             ).normalize();
             this.camera.lookAt(this.camera.position.clone().add(lookDir));
         }
+        this.controls.update()
     }
 
     defaultPosition() {
