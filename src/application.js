@@ -1,5 +1,6 @@
 import * as THREE from 'three/webgpu'
 import { Scene } from './scene'
+import { UI } from './ui'
 import { Camera } from './camera'
 
 export class Application {
@@ -12,12 +13,20 @@ export class Application {
         document.body.appendChild(this.renderer.domElement)
 
         this.camera = new Camera(this.renderer)
-        this.scene = new Scene()
-        this.scene.addCube()
+
+        this.scene = new Scene()        
+        // this.scene.addCube()
         this.scene.addAmbiantLight()
         this.scene.addGround(this.groundParams.texture, this.groundParams.repeats)
+        this.scene.addSkybox(this.skyboxParams.file)
         this.scene.loadScene('/scenes/scene_1.json')
         this.sunHelper = this.scene.addDirectionalLight()
+
+        this.ui = new UI()
+        this.ui.addSkyboxUI(this.skyboxFiles, this.skyboxParams, this.scene.addSkybox.bind(this.scene))
+        this.ui.addGroundUI(this.groundTextures, this.groundParams, this.scene.changeGround.bind(this.scene))
+        this.ui.addSunUI(this.scene.sun)
+
         this.renderer.setAnimationLoop(this.render.bind(this))
     }
 
@@ -32,7 +41,15 @@ export class Application {
         this.groundParams = {
             texture: this.groundTextures[0],
             repeats: 750,
-        };  
+        }
+        this.skyboxFiles = [
+            'DaySkyHDRI019A_2K-TONEMAPPED.jpg',
+            'DaySkyHDRI050A_2K-TONEMAPPED.jpg',
+            'NightSkyHDRI009_2K-TONEMAPPED.jpg',
+        ]
+        this.skyboxParams = {
+            file: this.skyboxFiles[0]
+        }
     }
 
     render() {

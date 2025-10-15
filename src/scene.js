@@ -1,5 +1,5 @@
 import * as THREE from 'three/webgpu'
-import { createStandardMaterial, loadGltf } from './tools'
+import { createStandardMaterial, loadGltf, textureloader } from './tools'
 
 export class Scene {
 
@@ -34,15 +34,18 @@ export class Scene {
     addGround(texture, repeats) {
         const planeSize = 5000
         const planeMatPBR = createStandardMaterial(texture, repeats)
-
         const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize)
         planeGeo.setAttribute('uv2', new THREE.BufferAttribute(planeGeo.attributes.uv.array, 2))
 
-        const planeMesh = new THREE.Mesh(planeGeo, planeMatPBR)
-        planeMesh.rotation.x = Math.PI * -.5
-        planeMesh.receiveShadow = true
+        this.ground = new THREE.Mesh(planeGeo, planeMatPBR)
+        this.ground.rotation.x = Math.PI * -.5
+        this.ground.receiveShadow = true
 
-        this.scene.add(planeMesh)
+        this.scene.add(this.ground)
+    }
+
+    changeGround(texture, repeats) {
+        this.ground.material  = createStandardMaterial(texture, repeats);
     }
 
     addCube() {
@@ -55,6 +58,17 @@ export class Scene {
         cube.castShadow = true
         cube.position.y = 1.0
         this.scene.add(cube)
+    }
+
+    addSkybox(file) {
+        console.log(file)
+        textureloader.load(
+            `skybox/${file}`,
+            (texture) => {
+                texture.mapping = THREE.EquirectangularReflectionMapping
+                texture.colorSpace = THREE.SRGBColorSpace
+                this.scene.background = texture
+            })
     }
 
     async loadScene(url) {
