@@ -7,6 +7,10 @@ export class UI {
         this.gui = new GUI({ title: 'Controls' })
     }
 
+    addGlobalUI(params, onChange) {
+        this.gui.add(params, 'useWASD').name('WASD Mode').onChange(onChange); 
+    }
+
     addSkyboxUI(files, params, onChange) {
         const folder = this.gui.addFolder('Sky')
         folder.add(params, 'file', files).name('skybox').onChange(onChange)

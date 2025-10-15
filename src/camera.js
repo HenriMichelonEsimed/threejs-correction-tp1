@@ -32,15 +32,24 @@ export class Camera {
         });
     }
 
-    process() {
-        const forwardVector = new THREE.Vector3()
-        this.camera.getWorldDirection(forwardVector)
-        forwardVector.y = 0
-        forwardVector.normalize()
-        const rightVector = new THREE.Vector3()
-        rightVector.crossVectors(forwardVector, this.camera.up).normalize()
-        this.camera.position.addScaledVector(forwardVector, this.direction.x * this.speed)
-        this.camera.position.addScaledVector(rightVector, this.direction.y * this.speed)
+    toogleControls(params) {
+        this.controls.enabled = !params.useWASD;
+        if (params.useWASD) {
+            this.camera.defaultPosition();
+        }
+    }
+
+    process(params) {
+        if (params.useWASD) {
+            const forwardVector = new THREE.Vector3()
+            this.camera.getWorldDirection(forwardVector)
+            forwardVector.y = 0
+            forwardVector.normalize()
+            const rightVector = new THREE.Vector3()
+            rightVector.crossVectors(forwardVector, this.camera.up).normalize()
+            this.camera.position.addScaledVector(forwardVector, this.direction.x * this.speed)
+            this.camera.position.addScaledVector(rightVector, this.direction.y * this.speed)
+        }
     }
 
     defaultPosition() {

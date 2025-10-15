@@ -61,7 +61,6 @@ export class Scene {
     }
 
     addSkybox(file) {
-        console.log(file)
         textureloader.load(
             `skybox/${file}`,
             (texture) => {

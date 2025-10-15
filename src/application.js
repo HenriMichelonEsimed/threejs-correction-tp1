@@ -23,6 +23,7 @@ export class Application {
         this.scene.loadScene('/scenes/scene_1.json')
 
         this.ui = new UI()
+        this.ui.addGlobalUI(this.globalParams, this.camera.toogleControls.bind(this.camera))
         this.ui.addSkyboxUI(this.skyboxFiles, this.skyboxParams, this.scene.addSkybox.bind(this.scene))
         this.ui.addGroundUI(this.groundTextures, this.groundParams, this.scene.changeGround.bind(this.scene))
         this.ui.addSunUI(this.scene.sun)
@@ -50,10 +51,13 @@ export class Application {
         this.skyboxParams = {
             file: this.skyboxFiles[0]
         }
+        this.globalParams = {
+            useWASD: false
+        }
     }
 
     render() {
-        this.camera.process()
+        this.camera.process(this.globalParams)
         this.sunHelper.update()
         this.renderer.render(this.scene.scene, this.camera.camera)
     }
