@@ -58,6 +58,28 @@ export class Application {
             }
         });
 
+        this.moveSelectedObject = false
+        window.addEventListener('keydown', (event) => {
+            switch (event.code) {
+                case 'KeyG': this.moveSelectedObject = !this.moveSelectedObject; break
+            }
+        })
+        document.addEventListener('mousemove', (event) => {
+            if (this.moveSelectedObject && this.selectedObject != null) {
+                const rect = this.renderer.domElement.getBoundingClientRect()
+                const mouse = new THREE.Vector2(
+                    ((event.clientX - rect.left) / rect.width) * 2 - 1,
+                    -((event.clientY - rect.top) / rect.height) * 2 + 1
+                )
+                const raycaster = new THREE.Raycaster();
+                raycaster.setFromCamera(mouse, this.camera.camera);
+                const intersects = raycaster.intersectObject(this.scene.ground, true);
+                if (intersects.length > 0) {
+                    this.selectedObject.position.copy(intersects[0].point);
+                    this.ui.updateSelectionUI(this.selectedObject)
+g                }
+            }
+        });
 
         this.renderer.setAnimationLoop(this.render.bind(this))
     }
