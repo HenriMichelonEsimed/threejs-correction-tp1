@@ -15,6 +15,7 @@ export class Application {
         this.scene = new Scene();
         this.scene.addCube();
         this.scene.addAmbiantLight();
+        this.sunHelper = this.scene.addDirectionalLight();
         this.scene.addGround(this.groundParams.texture, this.groundParams.repeats);
         this.renderer.setAnimationLoop(this.render.bind(this));
     }
@@ -34,6 +35,7 @@ export class Application {
     }
 
     render() {
+        this.sunHelper.update();
         this.renderer.render(this.scene.scene, this.camera.camera);
     }
 
