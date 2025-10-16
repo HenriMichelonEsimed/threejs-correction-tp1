@@ -15,7 +15,7 @@ export class UI {
     }
 
     addSelectionUI() {
-        this.infoFolder = this.gui.addFolder('Selected');
+        this.infoFolder = this.gui.addFolder('Selected')
         this.infoMessages = { 
             name: '--' ,
             position: '--',
@@ -42,7 +42,7 @@ export class UI {
     }
 
     hideSelectionUI() {
-        this.infoFolder.hide();
+        this.infoFolder.hide()
     }
 
     addSkyboxUI(files, params, onChange) {

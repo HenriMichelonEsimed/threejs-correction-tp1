@@ -37,27 +37,27 @@ export class Camera {
         this.isMouseCaptured = false;
         renderer.domElement.addEventListener('click', () => {
             if (params.useWASD) {
-                renderer.domElement.requestPointerLock();
+                renderer.domElement.requestPointerLock()
             }
-        });
+        })
         document.addEventListener('pointerlockchange', () => {
             if (params.useWASD) {
-                this.isMouseCaptured = document.pointerLockElement === renderer.domElement;
+                this.isMouseCaptured = document.pointerLockElement === renderer.domElement
             }
         })
         document.addEventListener('mousemove', (event) => {
             if (this.isMouseCaptured) {
-                this.yaw -= event.movementX * this.mouseSensitivity;
-                this.pitch -= event.movementY * this.mouseSensitivity;
-                this.pitch = Math.max(-Math.PI/2, Math.min(Math.PI/2, this.pitch));
+                this.yaw -= event.movementX * this.mouseSensitivity
+                this.pitch -= event.movementY * this.mouseSensitivity
+                this.pitch = Math.max(-Math.PI/2, Math.min(Math.PI/2, this.pitch))
             }
         });
     }
 
     toogleControls(params) {
-        this.controls.enabled = !params.useWASD;
+        this.controls.enabled = !params.useWASD
         if (params.useWASD) {
-            this.camera.defaultPosition();
+            this.camera.defaultPosition()
         }
     }
 
@@ -69,7 +69,7 @@ export class Camera {
             // forwardVector.normalize()
             // const rightVector = new THREE.Vector3()
             // rightVector.crossVectors(forwardVector, this.camera.up).normalize()
-            const forwardVector = new THREE.Vector3(-Math.sin(this.yaw), 0, -Math.cos(this.yaw)).normalize();
+            const forwardVector = new THREE.Vector3(-Math.sin(this.yaw), 0, -Math.cos(this.yaw)).normalize()
             const rightVector = new THREE.Vector3(-Math.cos(this.yaw), 0, Math.sin(this.yaw)).normalize()
             this.camera.position.addScaledVector(forwardVector, this.direction.x * this.speed)
             this.camera.position.addScaledVector(rightVector, this.direction.y * this.speed)
@@ -78,7 +78,7 @@ export class Camera {
                 Math.sin(this.pitch),
                 -Math.cos(this.yaw) * Math.cos(this.pitch)
             ).normalize();
-            this.camera.lookAt(this.camera.position.clone().add(lookDir));
+            this.camera.lookAt(this.camera.position.clone().add(lookDir))
         }
         this.controls.update()
     }

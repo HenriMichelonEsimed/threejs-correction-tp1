@@ -37,14 +37,14 @@ export class Application {
         this.ui.addGroundUI(this.groundTextures, this.groundParams, this.scene.changeGround.bind(this.scene))
         this.ui.addSunUI(this.scene.sun)
 
-        this.selectedObject = null;
-        this.selectedMesh = null;
-        this.selectedMeshMaterial = null;
+        this.selectedObject = null
+        this.selectedMesh = null
+        this.selectedMeshMaterial = null
         this.renderer.domElement.addEventListener('click', (event) => {
-            if (this.globalParams.useWASD) return;
+            if (this.globalParams.useWASD) return
             if (this.selectedObject != null) {
                 this.selectedMesh.material = this.selectedMeshMaterial
-                this.selectedObject = null;
+                this.selectedObject = null
             }
             const rect = this.renderer.domElement.getBoundingClientRect()
             const mouse = new THREE.Vector2(
@@ -93,7 +93,7 @@ export class Application {
         importInput.type = 'file'
         importInput.accept = '.json,application/json'
         importInput.style.display = 'none';
-        document.body.appendChild(importInput);
+        document.body.appendChild(importInput)
         importInput.addEventListener('change', async (event) => {
             await this.scene.importScene(event, { skybox : this.skyboxParams, ground: this.groundParams})
             importInput.value = ''

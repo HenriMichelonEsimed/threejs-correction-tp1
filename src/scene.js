@@ -4,7 +4,7 @@ import { createStandardMaterial, loadGltf, textureloader } from './tools'
 export class Scene {
 
     constructor() {
-        this.loadedObjects = {};
+        this.loadedObjects = {}
         this.scene = new THREE.Scene()
     }
 
@@ -12,18 +12,18 @@ export class Scene {
         this.sun = new THREE.DirectionalLight(0xFFFFFF, 3.0)
         this.sun.position.set(50, 100, 0)
         this.sun.target.position.set(0, 0, 0)
-        this.sun.castShadow = true;
-        this.sun.shadow.camera.left = -100;
-        this.sun.shadow.camera.right = 100;
-        this.sun.shadow.camera.top = 100;
-        this.sun.shadow.camera.bottom = -100;
-        this.sun.shadow.camera.near = 1;
-        this.sun.shadow.camera.far = 200;
-        this.sun.shadow.mapSize.set(2048, 2048);
+        this.sun.castShadow = true
+        this.sun.shadow.camera.left = -100
+        this.sun.shadow.camera.right = 100
+        this.sun.shadow.camera.top = 100
+        this.sun.shadow.camera.bottom = -100
+        this.sun.shadow.camera.near = 1
+        this.sun.shadow.camera.far = 200
+        this.sun.shadow.mapSize.set(2048, 2048)
         this.scene.add(this.sun)
-        this.sunHelper = new THREE.DirectionalLightHelper(this.sun);
-        this.scene.add(this.sunHelper);
-        return this.sunHelper;
+        this.sunHelper = new THREE.DirectionalLightHelper(this.sun)
+        this.scene.add(this.sunHelper)
+        return this.sunHelper
     }
 
     addAmbiantLight() {
@@ -45,7 +45,7 @@ export class Scene {
     }
 
     changeGround(texture, repeats) {
-        this.ground.material  = createStandardMaterial(texture, repeats);
+        this.ground.material  = createStandardMaterial(texture, repeats)
     }
 
     addCube() {
@@ -93,13 +93,13 @@ export class Scene {
          let params = {}
         if (data.params) {
             if (data.params.skybox) {
-                params.skybox = data.params.skybox;
+                params.skybox = data.params.skybox
             }
             if (data.params.ground) {
-                params.ground = data.params.ground;
+                params.ground = data.params.ground
             }
         }
-        return params;
+        return params
     }
 
     exportScene(params) {
@@ -122,16 +122,16 @@ export class Scene {
             });
         });
 
-        const jsonStr = JSON.stringify(exportData, null, 2);
-        const blob = new Blob([jsonStr], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'scene_export.json';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+        const jsonStr = JSON.stringify(exportData, null, 2)
+        const blob = new Blob([jsonStr], { type: 'application/json' })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = 'scene_export.json'
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        URL.revokeObjectURL(url)
     }
 
     clearScene() {
