@@ -71,9 +71,9 @@ export class Scene {
     }
 
     async loadScene(url) {
-        let data = null
         const response = await fetch(url)
-        data = await response.json()
+        const data = await response.json()
+        console.log(data)
         for (const obj of data.nodes) {
             if (this.loadedObjects[obj.name] == undefined) {
                 this.loadedObjects[obj.name] = await loadGltf(obj.name)
@@ -91,6 +91,16 @@ export class Scene {
             }});
             this.scene.add(mesh)
         }
+         let params = {}
+        if (data.params) {
+            if (data.params.skybox) {
+                params.skybox = data.params.skybox;
+            }
+            if (data.params.ground) {
+                params.ground = data.params.ground;
+            }
+        }
+        return params;
     }
 
     exportScene(params) {
@@ -123,6 +133,36 @@ export class Scene {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+    }
+
+    clearScene() {
+        let objectsToRemove = new Set()
+        this.scene.traverse((obj) => {
+            if (obj.userData && obj.userData.isSelectable) {
+                objectsToRemove.add(obj.userData.object)
+            }
+        })
+        objectsToRemove.forEach((obj) => {  
+            this.scene.remove(obj)
+        })        
+    }
+
+    async importScene(event, params) {
+        const file = event.target.files?.[0]
+        if (!file) return
+        this.clearScene()
+        const url = URL.createObjectURL(file)
+        try {
+            const loadedParams = await this.loadScene(url);
+            if (loadedParams.skybox) params.skybox = loadedParams.skybox
+            if (loadedParams.ground) params.ground = loadedParams.ground
+            this.addSkybox(params.skybox.file)
+            this.changeGround(params.ground.texture, params.ground.repeats)
+        } catch (err) {
+            alert('Import failed: ' + (err?.message ?? err));
+        } finally {
+            URL.revokeObjectURL(url)
+        }
     }
 
 }

@@ -7,8 +7,10 @@ export class UI {
         this.gui = new GUI({ title: 'Controls' })
     }
 
-    addGlobalUI(params, onChange, onExport) {
+    addGlobalUI(params, onChange, onExport, onImport, onClear) {
         this.gui.add(params, 'useWASD').name('WASD Mode').onChange(onChange)
+        this.gui.add({clear: onClear}, 'clear').name('Clear Scene')
+        this.gui.add({import: onImport}, 'import').name('Load Scene')
         this.gui.add({export: onExport}, 'export').name('Export Scene')
     }
 

@@ -23,9 +23,15 @@ export class Application {
         this.scene.loadScene('/scenes/scene_1.json')
 
         this.ui = new UI()
-        this.ui.addGlobalUI(this.globalParams, this.camera.toogleControls.bind(this.camera), () => {
-            this.scene.exportScene({ skybox : this.skyboxParams, ground: this.groundParams})
-        });
+        this.ui.addGlobalUI(this.globalParams, this.camera.toogleControls.bind(this.camera), 
+            () => {
+                this.scene.exportScene({ skybox : this.skyboxParams, ground: this.groundParams})
+            },
+            () => {
+                importInput.click()
+            },
+            this.scene.clearScene.bind(this.scene)
+        )
         this.ui.addSelectionUI()
         this.ui.addSkyboxUI(this.skyboxFiles, this.skyboxParams, this.scene.addSkybox.bind(this.scene))
         this.ui.addGroundUI(this.groundTextures, this.groundParams, this.scene.changeGround.bind(this.scene))
@@ -79,8 +85,18 @@ export class Application {
                 if (intersects.length > 0) {
                     this.selectedObject.position.copy(intersects[0].point);
                     this.ui.updateSelectionUI(this.selectedObject)
-g                }
+                }
             }
+        });
+
+        const importInput = document.createElement('input')
+        importInput.type = 'file'
+        importInput.accept = '.json,application/json'
+        importInput.style.display = 'none';
+        document.body.appendChild(importInput);
+        importInput.addEventListener('change', async (event) => {
+            await this.scene.importScene(event, { skybox : this.skyboxParams, ground: this.groundParams})
+            importInput.value = ''
         });
 
         this.renderer.setAnimationLoop(this.render.bind(this))
