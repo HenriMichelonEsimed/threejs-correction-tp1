@@ -9,8 +9,8 @@ export class Scene {
     }
 
     addDirectionalLight() {
-        this.sun = new THREE.DirectionalLight(0xFFFFFF, 1.0)
-        this.sun.position.set(-50, 100, 0)
+        this.sun = new THREE.DirectionalLight(0xFFFFFF, 3.0)
+        this.sun.position.set(50, 100, 0)
         this.sun.target.position.set(0, 0, 0)
         this.sun.castShadow = true;
         this.sun.shadow.camera.left = -100;
@@ -73,7 +73,6 @@ export class Scene {
     async loadScene(url) {
         const response = await fetch(url)
         const data = await response.json()
-        console.log(data)
         for (const obj of data.nodes) {
             if (this.loadedObjects[obj.name] == undefined) {
                 this.loadedObjects[obj.name] = await loadGltf(obj.name)

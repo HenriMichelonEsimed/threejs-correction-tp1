@@ -73,7 +73,7 @@ export class Camera {
             const rightVector = new THREE.Vector3(-Math.cos(this.yaw), 0, Math.sin(this.yaw)).normalize()
             this.camera.position.addScaledVector(forwardVector, this.direction.x * this.speed)
             this.camera.position.addScaledVector(rightVector, this.direction.y * this.speed)
-             const lookDir = new THREE.Vector3(
+            const lookDir = new THREE.Vector3(
                 -Math.sin(this.yaw) * Math.cos(this.pitch),
                 Math.sin(this.pitch),
                 -Math.cos(this.yaw) * Math.cos(this.pitch)
